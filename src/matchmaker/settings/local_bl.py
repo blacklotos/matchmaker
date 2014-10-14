@@ -1,5 +1,14 @@
 # Django settings for matchmaker project.
 import os
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOTS = "smtp.gmail.com"
+EMAIL_HOTS_USER = "kgdtln@gmail.com"
+EMAIL_HOTS_PASSWORD = "kp560420"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -128,3 +137,7 @@ INSTALLED_APPS = (
     'south',
     'profiles',
 )
+
+
+ACCOUNT_ACTIVATION_DAYS = 7
+LOGIN_REDIRECT_URL = '/'
