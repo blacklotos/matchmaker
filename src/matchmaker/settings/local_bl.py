@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'registration',
     'south',
     'profiles',
+    'questions',
 )
 
 

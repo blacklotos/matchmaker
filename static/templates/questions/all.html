@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class='row'>
+
+    {% for question in questions %}
+        <h3>{{ question }}</h3>
+        <p>
+        <form method='POST' action='' > {% csrf_token %}
+            <input type='hidden' value='{{ question.id }}' name='question_id'/>
+            {% for ans in question.answer_set.all %}
+            <input type='radio' value='{{ ans }}'
+                    {% for abc in ans.useranswer_set.all %}
+                        {% if abc %} checked="checked" {% endif %}
+                    {% endfor %} name='answer'> {{ ans }} <br/>
+        {% endfor %}
+        How important is this?
+        <select name="importance_levels">
+            {% for imp in importance_levels %}
+                <option {% for abc in question.useranswer_set.all %}
+                            {% if abc.importance_levels == imp %} selected="selected" {% endif %}
+                        {% endfor %} value="{{ imp }}">{{ imp }}</option>
+            {% endfor %}
+        </select>
+        </p>
+        <p><input type='submit' class="btn" value='Save'></p>
+    </form>
+    {% endfor %}
+
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if questions.has_previous %}
+                <a href="?page={{ questions.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ questions.number }} of {{ questions.paginator.num_pages }}.
+            </span>
+
+            {% if questions.has_next %}
+                <a href="?page={{ questions.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+{% endblock %}

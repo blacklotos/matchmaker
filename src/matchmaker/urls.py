@@ -12,4 +12,8 @@ urlpatterns = patterns('',
     (r'^accounts/', include('registration.backends.default.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^members/(?P<username>\w+)/$', 'profiles.views.single_user'),
-)
+    url(r'^edit/$', 'profiles.views.edit_profile', name='edit_profile'),
+    (r'^edit/jobs/$', 'profiles.views.edit_jobs'),
+    (r'^edit/locations/$', 'profiles.views.edit_locations'),
+    url(r'^questions/$', 'questions.views.all_questions', name='questions'),
+    )
