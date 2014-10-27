@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Question, Answer, UserAnswer
+from .models import Question, Answer, UserAnswer, MatchAnswer
 
 class QuestionAdmin(admin.ModelAdmin):
     class Meta:
@@ -18,3 +18,9 @@ class UserAnswerAdmin(admin.ModelAdmin):
         model = UserAnswer
 
 admin.site.register(UserAnswer, UserAnswerAdmin)
+
+class MatchAnswerAdmin(admin.ModelAdmin):
+    class Meta:
+        model = MatchAnswer
+
+admin.site.register(MatchAnswer, MatchAnswerAdmin)

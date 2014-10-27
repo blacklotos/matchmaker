@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
+{% block styles %}
 
+.success {
+    color: red;
+}
+
+{% endblock %}
 {% block content %}
 
 <div class='row'>
@@ -10,20 +16,38 @@
         <form method='POST' action='' > {% csrf_token %}
             <input type='hidden' value='{{ question.id }}' name='question_id'/>
             {% for ans in question.answer_set.all %}
-            <input type='radio' value='{{ ans }}'
+            <input type='radio' required="required" value='{{ ans }}'
                     {% for abc in ans.useranswer_set.all %}
                         {% if abc %} checked="checked" {% endif %}
                     {% endfor %} name='answer'> {{ ans }} <br/>
         {% endfor %}
-        How important is this?
-        <select name="importance_levels">
+        How important is this to you?
+        <select required="required" name="importance_level">
             {% for imp in importance_levels %}
                 <option {% for abc in question.useranswer_set.all %}
-                            {% if abc.importance_levels == imp %} selected="selected" {% endif %}
+                            {% if abc.importance_level == imp %} selected="selected" {% endif %}
                         {% endfor %} value="{{ imp }}">{{ imp }}</option>
             {% endfor %}
         </select>
         </p>
+        <h4>Ideal Match <small>How you would like to answer</small></h4>
+        <p>
+            {% for ans in question.answer_set.all %}
+                <input type='radio' required="required" value='{{ ans }}'
+                    {% for abc in ans.matchanswer_set.all %}
+                        {% if abc %} checked="checked" {% endif %}
+                    {% endfor %} name='match_answer'> {{ ans }} <br/>
+            {% endfor %}
+        How important is thair answer to you?
+        <select required="required" name="match_importance_level">
+            {% for imp in importance_levels %}
+                <option {% for abc in question.matchanswer_set.all %}
+                            {% if abc.importance_level == imp %} selected="selected" {% endif %}
+                        {% endfor %} value="{{ imp }}">{{ imp }}</option>
+            {% endfor %}
+        </select>
+        </p>
+
         <p><input type='submit' class="btn" value='Save'></p>
     </form>
     {% endfor %}
