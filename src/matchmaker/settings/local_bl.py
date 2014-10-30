@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'south',
     'profiles',
     'questions',
+    'matches',
 )
 
 

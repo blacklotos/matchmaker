@@ -1,9 +1,23 @@
 {% extends 'home.html' %}
 
-        {% block content %}
+    {% block content %}
+
+    <div class='col-lg-6 pull-left'>
+    <h1>Users</h1>
 
         {% for user in users %}
         <li> <a href="/members/{{ user.username}}"> {{ user }} </a> {% for item in user.address_set.all %} {% if forloop %} {{ item }} {% endif %} {% endfor %}</li>
         {% endfor %}
 
-        {% endblock %}
+    </div>
+
+    <div class='col-lg-6 pull-right'>
+        <h1>Suggested Jobs</h1>
+    {% for user in matches %}
+        {% for job in user.job_set.all %}
+            <li>{{ job.position }} at {{ job.employer }} in {{ job.city }} </li>
+        {% endfor %}
+    {% endfor %}
+    </div>
+
+    {% endblock %}

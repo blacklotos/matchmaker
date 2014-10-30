@@ -5,12 +5,18 @@ from django.forms.models import modelformset_factory
 from django.contrib import messages
 from .forms import AddressForm, JobForm, UserPictureForm
 from .models import Address, Job, UserPicture
+from questions.matching import points, match_percentage
+from matches.models import Match
 
 def home(request):
     return render_to_response ('home.html', locals(), context_instance=RequestContext(request))
 
 def all(request):
     users = User.objects.filter(is_active=True)
+    try:
+        matches = Match.object.user_matches(request.user)
+    except:
+        pass
     return render_to_response ('profile/all.html', locals(), context_instance=RequestContext(request))
 
 def single_user(request, username):
@@ -20,6 +26,13 @@ def single_user(request, username):
             single_user = user
     except:
         raise Http404
+    set_match, created = Match.object.get_or_create(from_user=request.user, to_user=single_user)
+    set_match.percent = round(match_percentage(request.user, single_user), 4)
+    set_match.save()
+
+    Match.object.good_match(request.user, single_user)
+
+    match = set_match.percent * 100
     return render_to_response ('profile/single_user.html', locals(), context_instance=RequestContext(request))
 
 def edit_profile(request):
