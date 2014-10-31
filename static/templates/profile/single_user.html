@@ -13,7 +13,7 @@
 
     <div class="col-lg-6">
     <h1>Info</h1>
-    <h3>Match {{ match }}%</h3>
+    {% if not request.user == single_user %}<h3>Match {{ match }}%</h3> {% endif %}
         <div class="panel panel-default">
             <div class="panel-heading">Jobs</div>
             <div class="panel-body">
@@ -26,7 +26,11 @@
              <div class="panel-heading">Addresses</div>
              <div class="panel-body">
                  {% for item in single_user.address_set.all %}
-                 {{ item }}
+                    {% if request.user.userrole.role == "Premium" or request.user.userrole.role == "Staff" %}
+                        <li>{{ item.street_address }}, {{ item.city }}</li>
+                    {% else %}
+                        {{ item }}
+                    {% endif %}
                  {% endfor %}
              </div>
              </div>

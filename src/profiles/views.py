@@ -6,18 +6,21 @@ from django.contrib import messages
 from .forms import AddressForm, JobForm, UserPictureForm
 from .models import Address, Job, UserPicture
 from questions.matching import points, match_percentage
-from matches.models import Match
+from matches.models import Match, JobMatch
 
 def home(request):
     return render_to_response ('home.html', locals(), context_instance=RequestContext(request))
 
 def all(request):
-    users = User.objects.filter(is_active=True)
-    try:
-        matches = Match.object.user_matches(request.user)
-    except:
-        pass
-    return render_to_response ('profile/all.html', locals(), context_instance=RequestContext(request))
+    if request.user.is_authenticated():
+        users = User.objects.filter(is_active=True)
+        try:
+            matches = Match.object.user_matches(request.user)
+        except:
+            pass
+        return render_to_response ('profile/all.html', locals(), context_instance=RequestContext(request))
+    else:
+        return render_to_response ('home.html', locals(), context_instance=RequestContext(request))
 
 def single_user(request, username):
     try:
@@ -28,9 +31,17 @@ def single_user(request, username):
         raise Http404
     set_match, created = Match.object.get_or_create(from_user=request.user, to_user=single_user)
     set_match.percent = round(match_percentage(request.user, single_user), 4)
+    set_match.good_match = Match.object.good_match(request.user, single_user)
     set_match.save()
 
-    Match.object.good_match(request.user, single_user)
+    if set_match.good_match:
+        single_user_jobs = Job.objects.filter(user=single_user)
+        if len(single_user_jobs) > 0:
+            for job in single_user_jobs:
+                job_match, created = JobMatch.objects.get_or_create (user=request.user, job=job)
+                print job_match
+                job_match.save()
+
 
     match = set_match.percent * 100
     return render_to_response ('profile/single_user.html', locals(), context_instance=RequestContext(request))
