@@ -1,5 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.signals import user_logged_in
+from matchmaker.stripe_info import secret_key
+import stripe
+
+stripe.api_key = secret_key
+
 
 class Address(models.Model):
     user = models.ForeignKey(User)
@@ -12,6 +18,7 @@ class Address(models.Model):
 
     def __unicode__(self):
         return self.city
+
 
 class Job (models.Model):
     user = models.ForeignKey(User)
@@ -30,6 +37,7 @@ class Job (models.Model):
     def __unicode__(self):
         return self.position
 
+
 class UserPicture (models.Model):
     user = models.ForeignKey(User)
     image = models.ImageField(upload_to='profiles/')
@@ -45,9 +53,37 @@ CHOICES = (
     ('Premium','Premium'),
 )
 
+
 class UserRole (models.Model):
     user = models.OneToOneField(User)
     role = models.CharField(max_length=120, default='Regular', choices=CHOICES)
 
     def __unicode__(self):
-        return str(self.role)
+        return self.role
+
+
+class UserStripe (models.Model):
+    user = models.OneToOneField(User)
+    stripe_id = models.CharField(max_length=120, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.user.username
+
+    def get_stripe_id(self):
+        return self.stripe_id
+
+
+def CreateStripeId (sender, user, request, **kwargs):
+    new_id, created = UserStripe.objects.get_or_create(user=user)
+    if created:
+        print created
+        #add user\s email to stripe, then set to stripeID
+        stripe_cust = stripe.Customer.create(email=user.email, description="Customer for %s " %user.email)
+        print stripe_cust.id
+        new_id.stripe_id =  stripe_cust.id
+        new_id.save()
+    else:
+        print "not created %s" %new_id
+
+
+user_logged_in.connect(CreateStripeId)

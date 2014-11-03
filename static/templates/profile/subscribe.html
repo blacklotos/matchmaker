@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block jquery %}
+    $(".scroll").click(function(e){e.preventDefault();
+    $link = $(this).attr("href");
+    console.log($link)
+    $name = $(this).attr("name");
+    $("#"+$name).attr("selected", "selected");
+    $("body, html").animate({scrollTop: $($link).offset().top - 60}, "slow");
+    });
+{% endblock %}
+
+{% block content %}
+
+    <div class="col-sm-12">
+        <h1>Subscribe</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm-12" style="text-align: center">
+            <div class="col-sm-3">
+                <h2>Forever Free</h2>
+                <p>
+                <ul>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li><a class="scroll" href="#free">Learn more...</a></li>
+                </ul>
+                </p>
+                <a class="btn btn-default scroll" href="#sing-up">Submit</a>
+            </div>
+            <div class="col-sm-3">
+                <h2>Premium</h2>
+                <p>
+                <ul>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li><a class="scroll" href="#premium">Learn more...</a></li>
+                </ul>
+                </p>
+                <a class="btn btn-default scroll" name="oneSelect" href="#sing-up">Sign for 1 Month</a>
+            </div>
+            <div class="col-sm-3">
+                <h2>Premium Plus</h2>
+                <p>
+                <ul>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li><a class="scroll" href="#premium6">Learn more...</a></li>
+                </ul>
+                </p>
+                <a class="btn btn-default scroll" name="sixSelect" href="#sing-up">Sign for 6 Month</a>
+            </div>
+            <div class="col-sm-3">
+                <h2>Premium Pro</h2>
+                <p>
+                <ul>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li><a class="scroll" href="#premium12">Learn more...</a></li>
+                </ul>
+                </p>
+                <a class="btn btn-default scroll" name="twelveSelect" href="#sing-up">Sign for 12 Month</a>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <br/><br/><br/><br/><br/>
+
+    <a name="free"></a>
+    <div class="row" id="free" style="height: 1000px;">
+        <h2>Free account INFO</h2>
+    </div>
+
+    <a name="premium"></a>
+    <div class="row" id="premium" style="height: 1000px;">
+        <h2>Premium account INFO</h2>
+    </div>
+
+    <a name="premium6"></a>
+    <div class="row" id="premium6" style="height: 1000px;">
+        <h2>Premium Plus account INFO</h2>
+    </div>
+
+    <a name="premium12"></a>
+    <div class="row" id="premium12" style="height: 1000px;">
+        <h2>Premium Pro account INFO</h2>
+    </div>
+
+    <a name="sing-up"></a>
+    <div class="row" id="sing-up" style="height: 1000px;">
+        <h2>SingUp</h2>
+        <form action="" method="POST" id="payment-form">
+            <span class="payment-errors"></span>
+            <div class="form-row">
+                <label>
+                    <span>Membership plan</span>
+                    <select id="select_month">
+                        <option id="oneSelect">Premium (1 month)</option>
+                        <option id="sixSelect">Premium Plus (6 months)</option>
+                        <option id="twelveSelect">Premium Pro (12 months)</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>Card Number</span>
+                    <input type="text" size="20" data-stripe="number"/>
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>CVC</span>
+                    <input type="text" size="4" data-stripe="cvc"/>
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>Expiration (MM/YYYY)</span>
+                    <input type="text" size="2" data-stripe="exp-month"/>
+                </label>
+                <span> / </span>
+                <input type="text" size="4" data-stripe="exp-year"/>
+            </div>
+
+            <button class="btn" type="submit">Submit Payment</button>
+        </form>
+    </div>
+
+{% endblock %}

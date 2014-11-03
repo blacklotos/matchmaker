@@ -11,6 +11,16 @@ from matches.models import Match, JobMatch
 def home(request):
     return render_to_response ('home.html', locals(), context_instance=RequestContext(request))
 
+def subscribe(request):
+    if request.user.is_authenticated():
+        #subsrcibtion choice
+        #assigb that choice successful payment
+        #collect credit cards here
+        return render_to_response ('profile/subscribe.html', locals(), context_instance=RequestContext(request))
+    else:
+        return render_to_response ('home.html', locals(), context_instance=RequestContext(request))
+
+
 def all(request):
     if request.user.is_authenticated():
         users = User.objects.filter(is_active=True)

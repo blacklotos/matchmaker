@@ -16,4 +16,6 @@ urlpatterns = patterns('',
     (r'^edit/jobs/$', 'profiles.views.edit_jobs'),
     (r'^edit/locations/$', 'profiles.views.edit_locations'),
     url(r'^questions/$', 'questions.views.all_questions', name='questions'),
+    url(r'^subscribe/$', 'profiles.views.subscribe', name='subscribe'),
+    url(r'^messages/', include('directmessages.urls')),
     )

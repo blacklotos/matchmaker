@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Compose</h2>
+    <form action="" method="POST"> {% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-default" type="submit">
+    </form>
+
+{% endblock %}

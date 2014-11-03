@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <table class="table">
+        <thead>
+            <th>
+                From
+            </th>
+            <th>
+                Subject
+            </th>
+            <th>
+                Received
+            </th>
+        </thead>
+        <tbody class="table-striped">
+        {% for item in messages_in_inbox %}
+            <tr>
+                <td>
+                    {{ item.sender }}
+                </td>
+                <td>
+                    <a href="{{ item.get_absolute_url }}">{{ item.subject|truncatewords:30 }}</a>
+                </td>
+                <td>
+                    {% if item.sent %}
+                        {{ item.sent }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
